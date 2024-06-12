@@ -1,0 +1,230 @@
+sysname S1
+vlan batch 10 20 30 40 60 100
+stp instance 1 root primary
+stp instance 2 root secondary
+dhcp enable
+stp region-configuration
+region-name yb-test
+instance 1 vlan 10 20
+instance 2 vlan 30 40
+active region-configuration
+interface Vlanif10
+ip address 192.168.1.1 255.255.255.0
+vrrp vrid 1 virtual-ip 192.168.1.254
+vrrp vrid 1 priority 120
+dhcp select relay
+DHCP relay gateway 192.168.22.254
+interface Vlanif20
+ip address 192.168.2.1 255.255.255.0
+vrrp vrid 2 virtual-ip 192.168.2.254
+vrrp vrid 2 priority 120
+dhcp select relay
+DHCP relay gateway 192.168.22.254
+interface Vlanif30
+ip address 192.168.3.1 255.255.255.0
+vrrp vrid 3 virtual-ip 192.168.3.254
+dhcp select relay
+DHCP relay gateway 192.168.22.254
+interface Vlanif40
+ip address 192.168.4.1 255.255.255.0
+vrrp vrid 4 virtual-ip 192.168.4.254
+dhcp select relay
+DHCP relay gateway 192.168.22.254
+interface Vlanif100
+ip address 192.168.22.2 255.255.255.0
+interface Vlanif60
+ip address 192.168.60.254 255.255.255.0
+dhcp select relay
+DHCP relay gateway 192.168.22.254
+interface Eth-Trunk1
+port link-type Trunk
+port Trunk allow-pass vlan all
+interface G1/0/1
+eth-Trunk 1
+interface G1/0/2
+eth-Trunk 1 
+interface G1/0/3 
+eth-Trunk 1
+interface G1/0/4
+port link-type access
+port default vlan 100
+interface G1/0/5 
+port link-type Trunk
+port Trunk allow-pass vlan all
+interface G1/0/6
+port link-type Trunk 
+port Trunk allow-pass vlan all
+interface G1/0/7 
+port link-type Trunk 
+port Trunk allow-pass vlan all 
+interface G1/0/8 
+port link-type Trunk 
+port Trunk allow-pass vlan all 
+interface G1/0/9 
+port link-type access 
+port default vlan 60
+②　核心层核心三层交换机S2核心配置代码：
+sysname S2
+vlan batch 10 20 30 40 100
+stp instance 1 root secondary
+stp instance 2 root primary
+dhcp enable
+stp region-configuration
+region-name yb-test
+instance 1 vlan 10 20
+instance 2 vlan 30 40
+active region-configuration
+interface Vlanif10
+ip address 192.168.1.2 255.255.255.0
+vrrp vrid 1 virtual-ip 192.168.1.254
+dhcp select relay
+DHCP relay gateway 192.168.22.254
+interface Vlanif20
+ip address 192.168.2.2 255.255.255.0
+vrrp vrid 2 virtual-ip 192.168.2.254
+dhcp select relay
+DHCP relay gateway 192.168.22.254
+interface Vlanif30
+ip address 192.168.3.2 255.255.255.0
+vrrp vrid 3 virtual-ip 192.168.3.254
+vrrp vrid 3 priority 120
+dhcp select relay
+DHCP relay gateway 192.168.22.254
+interface Vlanif40
+ip address 192.168.4.2 255.255.255.0
+vrrp vrid 4 virtual-ip 192.168.4.254
+vrrp vrid 4 priority 120
+dhcp select relay
+DHCP relay gateway 192.168.22.254
+interface Vlanif100
+ip address 192.168.22.2 255.255.255.0
+e-Trunk 1
+interface Eth-Trunk1
+port link-type Trunk
+port Trunk allow-pass vlan all
+interface G1/0/1
+eth-Trunk 1
+interface G1/0/2
+eth-Trunk 1
+interface G1/0/3
+eth-Trunk 1
+interface G1/0/4
+port link-type access
+port default vlan 100
+interface G1/0/5
+port link-type Trunk
+port Trunk allow-pass vlan all
+interface G1/0/6
+port link-type Trunk
+port Trunk allow-pass vlan all
+interface G1/0/7
+port link-type Trunk
+port Trunk allow-pass vlan all
+interface G1/0/8
+port link-type Trunk
+port Trunk allow-pass vlan all
+
+③　汇聚层交换机S3核心配置代码：
+sysname S3
+vlan batch 10 20 30 40
+stp region-configuration
+region-name yb-tset
+instance 1 vlan 10 20
+instance 2 vlan 30 40
+active region-configuration
+interface G1/0/1
+port link-type Trunk
+port Trunk allow-pass vlan all
+interface G1/0/2
+port link-type Trunk
+port Trunk allow-pass vlan all
+interface G1/0/3
+port link-type access
+port default vlan 10
+
+④　汇聚层交换机S4核心配置代码：
+sysname S4
+vlan batch 10 20 30 40
+stp instance 1 root secondary
+stp instance 2 root secondary
+stp region-configuration
+region-name yb-tset
+instance 1 vlan 10 20
+instance 2 vlan 30 40
+active region-configuration
+interface G1/0/1
+port link-type Trunk
+port Trunk allow-pass vlan all
+interface G1/0/2
+port link-type Trunk
+port Trunk allow-pass vlan all
+interface G1/0/3
+port link-type access
+port default vlan 20
+
+⑤　汇聚层交换机S5核心配置代码：
+sysname S5
+vlan batch 10 20 30 40
+stp region-configuration
+region-name yb-tset
+instance 1 vlan 10 20
+instance 2 vlan 30 40
+active region-configuration
+interface G1/0/1
+port link-type Trunk
+port Trunk allow-pass vlan all
+interface G1/0/2
+port link-type Trunk
+port Trunk allow-pass vlan all
+interface G1/0/3
+port link-type access
+port default vlan 30
+
+⑥　汇聚层交换机S6核心配置代码：
+sysname S6
+vlan batch 10 20 30 40
+stp instance 1 root secondary
+stp instance 2 root secondary
+stp region-configuration
+region-name yb-tset
+instance 1 vlan 10 20
+instance 2 vlan 30 40
+active region-configuration
+interface G1/0/1
+port link-type Trunk
+port Trunk allow-pass vlan all
+interface G1/0/2
+port link-type Trunk
+port Trunk allow-pass vlan all
+interface G1/0/3
+port link-type access
+port default vlan 40
+interface Ethernet0/0/4
+port link-type access
+port default vlan 40
+
+⑦　分部核心层三层交换机S7核心配置代码：
+sysname S7 // 设置设备名称为S1
+vlan batch 20 200
+interface G1/0/0
+port link-type access
+port default vlan 200
+interface Vlanif200
+ip address 192.168.33.2 255.255.255.0
+interface Vlanif20
+ip address 192.168.2.254 255.255.255.0
+dhcp select relay
+DHCP relay gateway 192.168.33.1
+interface G1/0/1
+port link-type Trunk
+port Trunk allow-pass vlan all
+
+⑧　汇聚层交换机S8核心配置代码：
+sysname S8
+vlan batch 10 20 30 40
+interface G1/0/0
+port link-type Trunk
+port Trunk allow-pass vlan all
+interface G1/0/1
+port link-type access
+port default vlan 20
